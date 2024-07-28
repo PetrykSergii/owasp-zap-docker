@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ZAP_IMAGE = 'owasp/dependency-check'
+        ZAP_IMAGE = 'dependency-check-custom'
         WEB_APP_URL = 'https://renthous.kyiv.ua/'
         CLONE_DIR = '/var/lib/jenkins/owasp-zap-docker'
     }
@@ -26,14 +26,6 @@ pipeline {
                 }
             }
         }
-        stage('Pull Docker Image') {
-            steps {
-                script {
-                    // Проверяем наличие образа перед сборкой
-                    sh 'docker pull owasp/dependency-check'
-                }
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -50,9 +42,8 @@ pipeline {
                     // Запуск Docker-контейнера с OWASP Dependency-Check и выполнение сканирования
                     docker.image("${ZAP_IMAGE}").inside {
                         sh '''
-                            cd ${CLONE_DIR}
                             # Запуск OWASP Dependency-Check и сканирование зависимостей
-                            dependency-check.sh --project "MyProject" --scan /path/to/project
+                            dependency-check/bin/dependency-check.sh --project "MyProject" --scan /path/to/project
                             # Создание отчета
                             mv /path/to/project/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html
                         '''
