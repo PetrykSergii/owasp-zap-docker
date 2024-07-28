@@ -44,10 +44,10 @@ pipeline {
                 }
             }
         }
-        stage('Run OWASP ZAP') {
+        stage('Run OWASP Dependency-Check') {
             steps {
                 script {
-                    // Запуск Docker-контейнера с OWASP ZAP и выполнение сканирования
+                    // Запуск Docker-контейнера с OWASP Dependency-Check и выполнение сканирования
                     docker.image("${ZAP_IMAGE}").inside {
                         sh '''
                             cd ${CLONE_DIR}
