@@ -9,20 +9,15 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                // Клонируем репозиторий и переходим в него
-                sh '''
-                    git clone https://github.com/PetrykSergii/owasp-zap-docker.git
-                    cd owasp-zap-docker
-                '''
+                // Клонируем репозиторий
+                git 'https://github.com/PetrykSergii/owasp-zap-docker.git'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
                     // Строим Docker-образ из клонированного репозитория
-                    dir('owasp-zap-docker') {
-                        docker.build("${ZAP_IMAGE}", ".")
-                    }
+                    docker.build("${ZAP_IMAGE}", ".")
                 }
             }
         }
