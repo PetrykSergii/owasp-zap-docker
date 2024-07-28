@@ -3,8 +3,7 @@ pipeline {
 
     environment {
         ZAP_IMAGE = 'dependency-check-custom'
-        WEB_APP_URL = 'https://renthous.kyiv.ua/'
-        CLONE_DIR = '/var/lib/jenkins/owasp-zap-docker'
+        CLONE_DIR = '/owasp-zap-docker'
     }
 
     stages {
@@ -41,7 +40,7 @@ pipeline {
                             echo "Starting OWASP Dependency-Check"
                             /entrypoint.sh
                             echo "Moving report to workspace"
-                            mv /workspace/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html || true
+                            mv /owasp-zap-docker/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html || true
                         '''
                     }
                 }
