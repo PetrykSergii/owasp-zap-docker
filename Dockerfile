@@ -1,12 +1,11 @@
-# Используем образ Debian
-FROM debian:latest
+# Используем образ OpenJDK
+FROM openjdk:11-jre-slim
 
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y \
     curl \
     jq \
-    unzip \
-    openjdk-11-jre
+    unzip
 
 # Устанавливаем OWASP Dependency-Check
 RUN curl -L https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.2/dependency-check-6.5.2-release.zip -o dependency-check.zip && \
@@ -22,5 +21,6 @@ RUN chmod +x /entrypoint.sh
 
 # Указываем точку входа
 ENTRYPOINT ["/entrypoint.sh"]
+
 
 
