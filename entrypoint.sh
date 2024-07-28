@@ -6,3 +6,4 @@ dependency-check/bin/dependency-check.sh --project "MyProject" --scan /path/to/p
 # Сохранение отчета как артефакт
 mv /path/to/project/dependency-check-report.html /workspace/dependency-check-report.html
 
+
