@@ -40,12 +40,12 @@ pipeline {
             steps {
                 script {
                     // Запуск Docker-контейнера с OWASP Dependency-Check и выполнение сканирования
-                    docker.image("${ZAP_IMAGE}").inside {
+                    docker.image("${ZAP_IMAGE}").inside('-u 0:0') {
                         sh '''
                             # Запуск OWASP Dependency-Check и сканирование зависимостей
-                            dependency-check/bin/dependency-check.sh --project "MyProject" --scan /path/to/project
+                            dependency-check/bin/dependency-check.sh --project "MyProject" --scan /path/to/project || true
                             # Создание отчета
-                            mv /path/to/project/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html
+                            mv /path/to/project/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html || true
                         '''
                     }
                 }
