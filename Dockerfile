@@ -1,5 +1,5 @@
-# Используем официальный образ OWASP ZAP
-FROM owasp/zap2docker-stable
+# Используем образ OWASP Dependency-Check
+FROM owasp/dependency-check
 
 # Устанавливаем зависимости (если нужно)
 RUN apt-get update && apt-get install -y \
@@ -14,3 +14,4 @@ RUN chmod +x /entrypoint.sh
 
 # Указываем точку входа
 ENTRYPOINT ["/entrypoint.sh"]
+
