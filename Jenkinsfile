@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ZAP_IMAGE = 'owasp-zap-docker'
+        ZAP_IMAGE = 'owasp/dependency-check'
         WEB_APP_URL = 'https://renthous.kyiv.ua/'
         CLONE_DIR = '/var/lib/jenkins/owasp-zap-docker'
     }
@@ -26,6 +26,14 @@ pipeline {
                 }
             }
         }
+        stage('Pull Docker Image') {
+            steps {
+                script {
+                    // Проверяем наличие образа перед сборкой
+                    sh 'docker pull owasp/dependency-check'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -43,13 +51,10 @@ pipeline {
                     docker.image("${ZAP_IMAGE}").inside {
                         sh '''
                             cd ${CLONE_DIR}
-                            # Запуск OWASP ZAP и сканирование веб-приложения
-                            zap.sh -daemon -config api.disablekey=true -port 8090
-                            zap-cli quick-scan --self-contained --start-options '-config api.disablekey=true' ${WEB_APP_URL}
-                            zap-cli report -o zap_report.html -f html
-
-                            # Сохранение отчета как артефакт
-                            mv zap_report.html ${WORKSPACE}/zap_report.html
+                            # Запуск OWASP Dependency-Check и сканирование зависимостей
+                            dependency-check.sh --project "MyProject" --scan /path/to/project
+                            # Создание отчета
+                            mv /path/to/project/dependency-check-report.html ${WORKSPACE}/dependency-check-report.html
                         '''
                     }
                 }
@@ -57,11 +62,11 @@ pipeline {
         }
         stage('Publish Report') {
             steps {
-                // Публикация отчета OWASP ZAP
+                // Публикация отчета OWASP Dependency-Check
                 publishHTML (target: [
-                    reportName: 'ZAP Report',
+                    reportName: 'Dependency-Check Report',
                     reportDir: '.',
-                    reportFiles: 'zap_report.html',
+                    reportFiles: 'dependency-check-report.html',
                     alwaysLinkToLastBuild: true,
                     keepAll: true
                 ])
