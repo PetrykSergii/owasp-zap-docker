@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Запуск ZAP в режиме командной строки с тестовым планом
-zap.sh -daemon -config api.disablekey=true -port 8090
-zap-cli quick-scan --self-contained --start-options '-config api.disablekey=true' https://renthous.kyiv.ua
-zap-cli report -o zap_report.html -f html
+# Запуск OWASP Dependency-Check и сканирование зависимостей
+dependency-check/bin/dependency-check.sh --project "MyProject" --scan /path/to/project
 
-# Удаление ZAP
-zap-cli shutdown
+# Сохранение отчета как артефакт
+mv /path/to/project/dependency-check-report.html /workspace/dependency-check-report.html
+
